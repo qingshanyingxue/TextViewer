@@ -4,6 +4,14 @@ const fs = require('fs')
 
 const isDev = process.env.NODE_ENV === 'development' || !app.isPackaged
 
+// native addon：文件统计
+let fileStatAddon
+try {
+  fileStatAddon = require('../native/index.js')
+} catch (e) {
+  fileStatAddon = null
+}
+
 let mainWindow
 
 function createWindow(filePath = null) {
@@ -25,7 +33,7 @@ function createWindow(filePath = null) {
 
   if (isDev) {
     mainWindow.loadURL('http://localhost:5173')
-    // mainWindow.webContents.openDevTools()
+    mainWindow.webContents.openDevTools()
   } else {
     mainWindow.loadFile(path.join(__dirname, '../dist/index.html'))
   }
@@ -221,6 +229,32 @@ ipcMain.handle('save-file-as', async (_, content, defaultName) => {
 })
 
 ipcMain.handle('get-platform', () => process.platform)
+
+ipcMain.handle('file-stat', async (_, filePath) => {
+  try {
+    if (fileStatAddon && typeof fileStatAddon.fileStat === 'function') {
+      const stat = fileStatAddon.fileStat(filePath)
+      return {
+        lines:    Number(stat.lines)  || 0,
+        words:    Number(stat.words)  || 0,
+        bytes:    Number(stat.bytes)  || 0,
+        chars:    Number(stat.chars)  || 0,
+        isNative: fileStatAddon.isNative,
+      }
+    }
+    // 降级：纯 JS
+    console.log('[file-stat] 使用 JS 降级，fileStatAddon:', fileStatAddon)
+    const content = fs.readFileSync(filePath, 'utf-8')
+    const bytes = fs.statSync(filePath).size
+    const lines = content ? content.split('\n').length : 0
+    const words = content.trim() ? content.trim().split(/\s+/).length : 0
+    const chars = [...content].length
+    return { lines, words, bytes, chars, isNative: false }
+  } catch (err) {
+    console.error('[file-stat] 错误:', err.message)
+    return { error: err.message }
+  }
+})
 
 ipcMain.on('window-minimize', () => mainWindow?.minimize())
 ipcMain.on('window-maximize', () => {

@@ -4,15 +4,18 @@
   "description": "支持 Markdown 和任意文本文件的桌面查看器",
   "main": "electron/main.js",
   "scripts": {
-    "dev":            "concurrently \"vite\" \"wait-on http://localhost:5173 && electron .\"",
-    "build":          "vite build",
+    "dev": "concurrently \"vite\" \"wait-on http://localhost:5173 && electron .\"",
+    "build": "vite build",
+    "build:native": "node-gyp rebuild",
     "electron:build": "vite build && electron-builder",
-    "preview":        "vite preview"
+    "preview": "vite preview"
   },
+  "gypfile": true,
   "dependencies": {
     "highlight.js": "^11.10.0",
     "markdown-it": "^14.1.0",
     "markdown-it-anchor": "^9.2.0",
+    "node-addon-api": "^8.7.0",
     "vue": "^3.4.0"
   },
   "devDependencies": {
@@ -20,6 +23,7 @@
     "concurrently": "^9.0.0",
     "electron": "^33.0.0",
     "electron-builder": "^25.0.0",
+    "node-gyp": "^12.3.0",
     "terser": "^5.46.2",
     "vite": "^5.0.0",
     "wait-on": "^8.0.0"
@@ -29,7 +33,9 @@
     "productName": "文本查看器",
     "copyright": "版权所有 © 2026",
     "asar": true,
-    "asarUnpack": [],
+    "asarUnpack": [
+      "build/Release/*.node"
+    ],
     "compression": "maximum",
     "directories": {
       "output": "dist-electron",
@@ -39,6 +45,8 @@
       "dist/**/*",
       "electron/main.js",
       "electron/preload.js",
+      "native/index.js",
+      "build/Release/*.node",
       "!**/node_modules/*/{CHANGELOG.md,README.md,README,readme.md,readme}",
       "!**/node_modules/*/{test,__tests__,tests,powered-test,example,examples}",
       "!**/node_modules/*/{.eslintrc,.eslintignore,.editorconfig}",
@@ -144,8 +152,18 @@
     },
     "win": {
       "target": [
-        { "target": "nsis",     "arch": ["x64"] },
-        { "target": "portable", "arch": ["x64"] }
+        {
+          "target": "nsis",
+          "arch": [
+            "x64"
+          ]
+        },
+        {
+          "target": "portable",
+          "arch": [
+            "x64"
+          ]
+        }
       ],
       "icon": "build/icon.ico",
       "requestedExecutionLevel": "asInvoker"
@@ -157,7 +175,9 @@
       "createDesktopShortcut": true,
       "createStartMenuShortcut": true,
       "deleteAppDataOnUninstall": true,
-      "installerLanguages": ["zh_CN"],
+      "installerLanguages": [
+        "zh_CN"
+      ],
       "language": "2052",
       "shortcutName": "文本查看器",
       "uninstallDisplayName": "文本查看器",

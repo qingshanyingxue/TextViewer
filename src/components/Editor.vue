@@ -64,6 +64,16 @@
     <Transition name="toast">
       <div v-if="toast" class="toast" :class="toast.type">{{ toast.msg }}</div>
     </Transition>
+
+    <!-- 底部状态栏 -->
+    <div class="statusbar">
+      <span v-if="fileStat && !fileStat.error">
+        {{ fileStat.lines ?? 0 }} 行 · {{ fileStat.words ?? 0 }} 词 · {{ fileStat.chars ?? 0 }} 字符 · {{ formatBytes(fileStat.bytes ?? 0) }}
+        <span v-if="fileStat.isNative" class="native-badge" title="由 C native 模块统计">⚡ native</span>
+      </span>
+      <span v-else-if="fileStat?.error" class="muted">统计失败</span>
+      <span v-else class="muted">—</span>
+    </div>
   </div>
 </template>
 
@@ -83,6 +93,7 @@ const editContent = ref('')
 const savedContent = ref('')
 const textareaRef = ref(null)
 const toast = ref(null)
+const fileStat = ref(null)
 let toastTimer = null
 
 const isDirty = computed(() => editContent.value !== savedContent.value)
@@ -119,10 +130,23 @@ const lineCount = computed(() => editContent.value.split('\n').length)
 const extColor = computed(() => EXT_COLORS[props.file.ext] || '#555')
 
 // ── watch file prop ────────────────────────────────────
-watch(() => props.file, (f) => {
+watch(() => props.file, async (f) => {
   editContent.value = f.content || ''
   savedContent.value = f.content || ''
   viewMode.value = isMarkdown.value ? 'preview' : 'highlight'
+  // 调用 C native 模块统计文件信息
+  fileStat.value = null
+  if (f.filePath) {
+    const result = await window.electronAPI?.fileStat(f.filePath)
+    // 不管成功失败都赋值，避免一直显示"加载中"
+    fileStat.value = result ?? { lines: 0, words: 0, bytes: 0, chars: 0, isNative: false }
+  } else {
+    // 没有文件路径（拖拽等场景），用内容直接统计
+    const content = f.content || ''
+    const lines = content ? content.split('\n').length : 0
+    const words = content.trim() ? content.trim().split(/\s+/).length : 0
+    fileStat.value = { lines, words, bytes: new Blob([content]).size, chars: [...content].length, isNative: false }
+  }
 }, { immediate: true })
 
 // ── actions ────────────────────────────────────────────
@@ -198,6 +222,12 @@ onUnmounted(() => {
 // ── helpers ────────────────────────────────────────────
 function escapeHtml(str) {
   return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+}
+
+function formatBytes(bytes) {
+  if (bytes < 1024) return bytes + ' B'
+  if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + ' KB'
+  return (bytes / 1024 / 1024).toFixed(2) + ' MB'
 }
 
 const EXT_LANG_MAP = {
@@ -398,6 +428,26 @@ const EXT_COLORS = {
   font-size: inherit;
   line-height: inherit;
 }
+
+/* 状态栏 */
+.statusbar {
+  height: 24px;
+  padding: 0 12px;
+  background: var(--bg-secondary);
+  border-top: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  font-size: 11px;
+  color: var(--text-muted);
+  flex-shrink: 0;
+  gap: 4px;
+  user-select: none;
+}
+.native-badge {
+  color: #e5c07b;
+  margin-left: 4px;
+}
+.muted { opacity: 0.5; }
 
 /* Toast */
 .toast {

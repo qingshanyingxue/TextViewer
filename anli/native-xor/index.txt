@@ -1,0 +1,4 @@
+cd anli/native-xor
+npm install
+npm run build:native   # 编译 C++ → .node
+npm run dev 
