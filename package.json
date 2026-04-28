@@ -1,0 +1,60 @@
+{
+  "name": "electron-text-viewer",
+  "version": "1.0.0",
+  "description": "A desktop text viewer supporting Markdown and any text file",
+  "main": "electron/main.js",
+  "scripts": {
+    "dev": "concurrently \"vite\" \"wait-on http://localhost:5173 && electron .\"",
+    "build": "vite build",
+    "electron:build": "vite build && electron-builder",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "markdown-it": "^14.1.0",
+    "markdown-it-anchor": "^9.2.0",
+    "highlight.js": "^11.10.0",
+    "vue": "^3.4.0"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^5.0.0",
+    "concurrently": "^9.0.0",
+    "electron": "^33.0.0",
+    "electron-builder": "^25.0.0",
+    "vite": "^5.0.0",
+    "wait-on": "^8.0.0"
+  },
+  "build": {
+    "appId": "com.textviewer.app",
+    "productName": "TextViewer",
+    "directories": {
+      "output": "dist-electron"
+    },
+    "fileAssociations": [
+      {
+        "ext": ["txt", "md", "markdown", "log", "json", "yaml", "yml", "toml", "ini", "cfg", "conf", "xml", "html", "htm", "css", "js", "ts", "jsx", "tsx", "py", "rb", "go", "rs", "java", "c", "cpp", "h", "sh", "bash", "zsh", "fish", "ps1", "bat", "cmd", "csv", "tsv", "sql", "graphql", "vue", "svelte", "astro", "mdx"],
+        "name": "Text File",
+        "description": "Text and code files",
+        "role": "Viewer"
+      }
+    ],
+    "mac": {
+      "category": "public.app-category.productivity",
+      "target": ["dmg", "zip"],
+      "icon": "build/icon.icns"
+    },
+    "win": {
+      "target": ["nsis", "portable"],
+      "icon": "build/icon.ico"
+    },
+    "linux": {
+      "target": ["AppImage", "deb"],
+      "icon": "build/icon.png"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true
+    }
+  }
+}
