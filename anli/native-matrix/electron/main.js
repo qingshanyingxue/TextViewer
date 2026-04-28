@@ -13,8 +13,8 @@ function createWindow() {
       contextIsolation: true,
     },
   })
-  process.env.NODE_ENV === 'development'
-    ? win.loadURL('http://localhost:5173')
+  !app.isPackaged
+    ? win.loadURL('http://localhost:5174')
     : win.loadFile(path.join(__dirname, '../dist/index.html'))
 }
 
