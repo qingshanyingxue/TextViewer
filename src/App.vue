@@ -1,6 +1,6 @@
 <template>
   <div class="app">
-    <TitleBar :filename="fileState.name" :platform="platform" />
+    <TitleBar :filename="fileState.name" :platform="platform" @action="onMenuAction" />
     <div class="content">
       <Editor v-if="fileState.content !== null" :file="fileState" @file-saved="onFileSaved" />
       <Welcome v-else @open="openFile" />
@@ -16,6 +16,7 @@ import Welcome from './components/Welcome.vue'
 
 const platform = ref('win32')
 const fileState = ref({ content: null, ext: '', name: '', filePath: '' })
+const editorRef = ref(null)
 
 async function openFile() {
   await window.electronAPI?.openFileDialog()
@@ -23,6 +24,22 @@ async function openFile() {
 
 function onFileSaved({ filePath, ext, name }) {
   fileState.value = { ...fileState.value, filePath, ext, name }
+}
+
+function onMenuAction(action) {
+  switch (action) {
+    case 'open':       window.electronAPI?.openFileDialog(); break
+    case 'save':       window.dispatchEvent(new CustomEvent('menu-action', { detail: 'save' })); break
+    case 'save-as':    window.dispatchEvent(new CustomEvent('menu-action', { detail: 'save-as' })); break
+    case 'quit':       window.electronAPI?.windowClose(); break
+    case 'reload':     location.reload(); break
+    case 'zoom-in':    document.body.style.zoom = (parseFloat(document.body.style.zoom || 1) + 0.1).toFixed(1); break
+    case 'zoom-out':   document.body.style.zoom = (parseFloat(document.body.style.zoom || 1) - 0.1).toFixed(1); break
+    case 'zoom-reset': document.body.style.zoom = 1; break
+    case 'fullscreen': window.electronAPI?.toggleFullscreen?.(); break
+    case 'copy':       document.execCommand('copy'); break
+    case 'select-all': document.execCommand('selectAll'); break
+  }
 }
 
 onMounted(async () => {

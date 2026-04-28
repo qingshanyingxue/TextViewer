@@ -186,6 +186,10 @@ onMounted(() => {
   window.addEventListener('keydown', onKeydown)
   window.electronAPI?.onMenuSave(() => save())
   window.electronAPI?.onMenuSaveAs(() => saveAs())
+  window.addEventListener('menu-action', (e) => {
+    if (e.detail === 'save') save()
+    if (e.detail === 'save-as') saveAs()
+  })
 })
 onUnmounted(() => {
   window.removeEventListener('keydown', onKeydown)
