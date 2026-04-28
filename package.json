@@ -1,13 +1,13 @@
 {
   "name": "electron-text-viewer",
   "version": "1.0.0",
-  "description": "A desktop text viewer supporting Markdown and any text file",
+  "description": "支持 Markdown 和任意文本文件的桌面查看器",
   "main": "electron/main.js",
   "scripts": {
-    "dev": "concurrently \"vite\" \"wait-on http://localhost:5173 && electron .\"",
-    "build": "vite build",
+    "dev":            "concurrently \"vite\" \"wait-on http://localhost:5173 && electron .\"",
+    "build":          "vite build",
     "electron:build": "vite build && electron-builder",
-    "preview": "vite preview"
+    "preview":        "vite preview"
   },
   "dependencies": {
     "highlight.js": "^11.10.0",
@@ -27,7 +27,7 @@
   "build": {
     "appId": "com.textviewer.app",
     "productName": "文本查看器",
-    "copyright": "Copyright © 2024",
+    "copyright": "版权所有 © 2026",
     "asar": true,
     "asarUnpack": [],
     "compression": "maximum",
@@ -104,6 +104,7 @@
     ],
     "mac": {
       "category": "public.app-category.productivity",
+      "artifactName": "${productName}.${ext}",
       "target": [
         {
           "target": "dmg",
@@ -143,18 +144,8 @@
     },
     "win": {
       "target": [
-        {
-          "target": "nsis",
-          "arch": [
-            "x64"
-          ]
-        },
-        {
-          "target": "portable",
-          "arch": [
-            "x64"
-          ]
-        }
+        { "target": "nsis",     "arch": ["x64"] },
+        { "target": "portable", "arch": ["x64"] }
       ],
       "icon": "build/icon.ico",
       "requestedExecutionLevel": "asInvoker"
@@ -168,8 +159,13 @@
       "deleteAppDataOnUninstall": true,
       "installerLanguages": ["zh_CN"],
       "language": "2052",
-      "defaultInstallDir": "$LOCALAPPDATA\\wenjian\\${productName}",
+      "shortcutName": "文本查看器",
+      "uninstallDisplayName": "文本查看器",
+      "artifactName": "${productName}-安装包.${ext}",
       "include": "build/installer.nsh"
+    },
+    "portable": {
+      "artifactName": "${productName}-便携版.${ext}"
     },
     "linux": {
       "target": [
