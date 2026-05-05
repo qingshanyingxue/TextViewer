@@ -2,39 +2,48 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <Filter Include="..">
-      <UniqueIdentifier>{13ED4249-1F9C-5F0F-2651-29A73F3A7059}</UniqueIdentifier>
+      <UniqueIdentifier>{739DB09A-CC57-A953-A6CF-F64FA08E4FA7}</UniqueIdentifier>
     </Filter>
     <Filter Include="..\native">
-      <UniqueIdentifier>{751DE1B9-2CA6-B33D-2A40-92CBD5B002F3}</UniqueIdentifier>
+      <UniqueIdentifier>{D56EDB24-21BF-8816-5D92-25C635122F26}</UniqueIdentifier>
     </Filter>
     <Filter Include="F:">
-      <UniqueIdentifier>{B528B049-EBF2-8119-EEF0-9943E5FE1000}</UniqueIdentifier>
+      <UniqueIdentifier>{CE1D60B6-136E-4590-C8A4-F7DB2F84E3F6}</UniqueIdentifier>
     </Filter>
     <Filter Include="F:\前端">
-      <UniqueIdentifier>{7980A702-FE72-354D-CD03-EEAF4B0C4883}</UniqueIdentifier>
+      <UniqueIdentifier>{DDFF36C0-9185-9E7F-35E4-B38F7031071B}</UniqueIdentifier>
     </Filter>
     <Filter Include="F:\前端\markdown">
-      <UniqueIdentifier>{7BC6865C-7C13-3036-1111-4D607B82B4DF}</UniqueIdentifier>
+      <UniqueIdentifier>{8F67B3F7-57B4-418E-FBE4-B6E8328692D4}</UniqueIdentifier>
     </Filter>
     <Filter Include="F:\前端\markdown\node_modules">
-      <UniqueIdentifier>{126A39EA-1D28-5689-C126-0DA0AB5837A0}</UniqueIdentifier>
+      <UniqueIdentifier>{56DF7A98-063D-FB9D-485C-089023B4C16A}</UniqueIdentifier>
     </Filter>
-    <Filter Include="F:\前端\markdown\node_modules\node-gyp">
-      <UniqueIdentifier>{49558BB4-6D34-CA91-A65D-85A65792DC11}</UniqueIdentifier>
+    <Filter Include="F:\前端\markdown\node_modules\@electron">
+      <UniqueIdentifier>{6FD122B1-87CE-5BE7-127F-692B6E499EA3}</UniqueIdentifier>
     </Filter>
-    <Filter Include="F:\前端\markdown\node_modules\node-gyp\src">
-      <UniqueIdentifier>{F1003AD6-4B6D-45DF-3F56-5CAC869BF55E}</UniqueIdentifier>
+    <Filter Include="F:\前端\markdown\node_modules\@electron\rebuild">
+      <UniqueIdentifier>{CD14FC75-742D-E848-EAFB-0788289D378D}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="F:\前端\markdown\node_modules\@electron\rebuild\node_modules">
+      <UniqueIdentifier>{56DF7A98-063D-FB9D-485C-089023B4C16A}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="F:\前端\markdown\node_modules\@electron\rebuild\node_modules\node-gyp">
+      <UniqueIdentifier>{77348C0E-2034-7791-74D5-63C077DF5A3B}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="F:\前端\markdown\node_modules\@electron\rebuild\node_modules\node-gyp\src">
+      <UniqueIdentifier>{8CDEE807-BC53-E450-C8B8-4DEBB66742D4}</UniqueIdentifier>
     </Filter>
     <Filter Include="..">
-      <UniqueIdentifier>{13ED4249-1F9C-5F0F-2651-29A73F3A7059}</UniqueIdentifier>
+      <UniqueIdentifier>{739DB09A-CC57-A953-A6CF-F64FA08E4FA7}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\native\filestat.cc">
       <Filter>..\native</Filter>
     </ClCompile>
-    <ClCompile Include="F:\前端\markdown\node_modules\node-gyp\src\win_delay_load_hook.cc">
-      <Filter>F:\前端\markdown\node_modules\node-gyp\src</Filter>
+    <ClCompile Include="F:\前端\markdown\node_modules\@electron\rebuild\node_modules\node-gyp\src\win_delay_load_hook.cc">
+      <Filter>F:\前端\markdown\node_modules\@electron\rebuild\node_modules\node-gyp\src</Filter>
     </ClCompile>
     <None Include="..\binding.gyp">
       <Filter>..</Filter>
