@@ -19,6 +19,8 @@
     "vue": "^3.4.0"
   },
   "devDependencies": {
+    "asarmor": "^2.0.0",
+    "@electron/fuses": "^1.8.0",
     "@vitejs/plugin-vue": "^5.0.0",
     "concurrently": "^9.0.0",
     "electron": "^33.0.0",
@@ -112,6 +114,7 @@
         "role": "Viewer"
       }
     ],
+     "afterPack": "scripts/after-pack.js",
     "mac": {
       "category": "public.app-category.productivity",
       "artifactName": "${productName}.${ext}",
@@ -184,7 +187,7 @@
       "shortcutName": "文本查看器",
       "uninstallDisplayName": "文本查看器",
       "artifactName": "${productName}-安装包.${ext}",
-      "include": "build/installer.nsh"
+      "include": "scripts/installer.nsh"
     },
     "portable": {
       "artifactName": "${productName}-便携版.${ext}"

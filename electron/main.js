@@ -1,8 +1,63 @@
 const { app, BrowserWindow, ipcMain, dialog, Menu, shell } = require('electron')
 const path = require('path')
 const fs = require('fs')
+const crypto = require('crypto')
 
 const isDev = process.env.NODE_ENV === 'development' || !app.isPackaged
+
+// ── 安全加固：运行时保护 ──────────────────────────────────
+if (!isDev) {
+  // 1. 禁止打开 DevTools（生产环境）
+  app.on('web-contents-created', (_, contents) => {
+    contents.on('devtools-opened', () => {
+      contents.closeDevTools()
+    })
+    // 禁止导航到外部 URL（防止被重定向到恶意页面）
+    contents.on('will-navigate', (event) => {
+      event.preventDefault()
+    })
+    // 禁止创建新窗口
+    contents.setWindowOpenHandler(() => ({ action: 'deny' }))
+  })
+
+  // 2. 检测调试器附加（简单检测）
+  const { exec } = require('child_process')
+  setInterval(() => {
+    if (process.platform === 'win32') {
+      exec('tasklist /fi "imagename eq node.exe" /fi "windowtitle ne N/A"', (err, stdout) => {
+        if (stdout.toLowerCase().includes('debugger')) {
+          app.quit()
+        }
+      })
+    }
+  }, 5000)
+}
+
+// // 3. ASAR 完整性校验（防止 asar 被篡改）
+// function verifyIntegrity() {
+//   if (isDev) return true
+//   try {
+//     const asarPath = path.join(process.resourcesPath, 'app.asar')
+//     if (!fs.existsSync(asarPath)) return false
+//     const hash = crypto.createHash('sha256')
+//     const fd = fs.openSync(asarPath, 'r')
+//     const buffer = Buffer.alloc(65536)
+//     let bytesRead
+//     while ((bytesRead = fs.readSync(fd, buffer, 0, buffer.length, null)) > 0) {
+//       hash.update(buffer.slice(0, bytesRead))
+//     }
+//     fs.closeSync(fd)
+//     // 生产环境应该把正确的 hash 存到某处对比，这里只做基础校验
+//     return true
+//   } catch {
+//     return false
+//   }
+// }
+
+// if (!isDev && !verifyIntegrity()) {
+//   console.error('完整性校验失败')
+//   app.quit()
+// }
 
 // native addon：文件统计
 let fileStatAddon
@@ -33,7 +88,7 @@ function createWindow(filePath = null) {
 
   if (isDev) {
     mainWindow.loadURL('http://localhost:5173')
-    mainWindow.webContents.openDevTools()
+    // DevTools 仅开发环境手动打开
   } else {
     mainWindow.loadFile(path.join(__dirname, '../dist/index.html'))
   }
