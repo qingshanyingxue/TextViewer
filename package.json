@@ -114,7 +114,6 @@
         "role": "Viewer"
       }
     ],
-     "afterPack": "scripts/after-pack.js",
     "mac": {
       "category": "public.app-category.productivity",
       "artifactName": "${productName}.${ext}",

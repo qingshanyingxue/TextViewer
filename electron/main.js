@@ -20,17 +20,17 @@ if (!isDev) {
     contents.setWindowOpenHandler(() => ({ action: 'deny' }))
   })
 
-  // 2. 检测调试器附加（简单检测）
-  const { exec } = require('child_process')
-  setInterval(() => {
-    if (process.platform === 'win32') {
-      exec('tasklist /fi "imagename eq node.exe" /fi "windowtitle ne N/A"', (err, stdout) => {
-        if (stdout.toLowerCase().includes('debugger')) {
-          app.quit()
-        }
-      })
-    }
-  }, 5000)
+  // // 2. 检测调试器附加（简单检测）
+  // const { exec } = require('child_process')
+  // setInterval(() => {
+  //   if (process.platform === 'win32') {
+  //     exec('tasklist /fi "imagename eq node.exe" /fi "windowtitle ne N/A"', (err, stdout) => {
+  //       if (stdout.toLowerCase().includes('debugger')) {
+  //         app.quit()
+  //       }
+  //     })
+  //   }
+  // }, 5000)
 }
 
 // // 3. ASAR 完整性校验（防止 asar 被篡改）

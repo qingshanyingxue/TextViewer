@@ -3,15 +3,15 @@ ${StrStr}   ; 声明 StrStr 函数
 
 ; 初始化默认安装路径
 !macro preInit
-  StrCpy $INSTDIR "$LOCALAPPDATA\wenjian\文本查看器"
+  StrCpy $INSTDIR "$LOCALAPPDATA\wenjian"
 !macroend
 
-; 每次用户修改安装目录时触发，自动追加 \wenjian\文本查看器
+; 每次用户修改安装目录时触发，自动追加 \wenjian
 Function .onVerifyInstDir
   ; 检查路径末尾是否已包含目标子目录
-  ${StrStr} $R0 "$INSTDIR" "\wenjian\文本查看器"
+  ${StrStr} $R0 "$INSTDIR" "\wenjian"
   ${If} $R0 == ""
-    StrCpy $INSTDIR "$INSTDIR\wenjian\文本查看器"
+    StrCpy $INSTDIR "$INSTDIR\wenjian"
   ${EndIf}
 FunctionEnd
 
